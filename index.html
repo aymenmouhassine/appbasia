@@ -8,14 +8,16 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; background: #000; font-family: Georgia, serif; overflow: hidden; }
     #app { position: fixed; inset: 0; }
-    #splash { position: absolute; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; }
+    #splash { position: absolute; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; overflow: hidden; }
     #splash .glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, #e5091410 0%, transparent 70%); pointer-events: none; }
-    #splash .logo { margin-bottom: 28px; }
+    .heart { position: absolute; color: #e50914; font-size: 14px; opacity: 0; animation: floatHeart 6s ease-in infinite; pointer-events: none; }
+    @keyframes floatHeart { 0% { opacity: 0; transform: translateY(100vh) scale(0.5); } 20% { opacity: 0.6; } 80% { opacity: 0.3; } 100% { opacity: 0; transform: translateY(-100px) scale(1.2); } }
+    #splash .logo { margin-bottom: 28px; z-index: 1; }
     #splash .logo svg { width: 80px; height: 22px; }
-    #splash h1 { color: #fff; font-size: clamp(36px,10vw,72px); font-weight: bold; letter-spacing: 6px; line-height: 1; text-align: center; animation: fadeUp 0.9s cubic-bezier(0.34,1.3,0.64,1) 0.15s both; }
+    #splash h1 { color: #fff; font-size: clamp(36px,10vw,72px); font-weight: bold; letter-spacing: 6px; line-height: 1; text-align: center; animation: fadeUp 0.9s cubic-bezier(0.34,1.3,0.64,1) 0.15s both; z-index: 1; }
     #splash .amp { display: block; color: #e50914; font-size: 0.5em; letter-spacing: 12px; margin: 8px 0; }
-    #splash .tagline { color: #ffffff44; font-style: italic; font-size: 13px; letter-spacing: 3px; margin-top: 14px; margin-bottom: 48px; animation: fadeUp 0.9s ease 0.5s both; }
-    #splash .btn-watch { background: #e50914; color: #fff; border: none; padding: 14px 48px; font-size: 14px; letter-spacing: 4px; cursor: pointer; font-family: Georgia, serif; border-radius: 2px; animation: fadeUp 0.8s ease 0.7s both; transition: background 0.2s; }
+    #splash .tagline { color: #ffffff44; font-style: italic; font-size: 13px; letter-spacing: 3px; margin-top: 14px; margin-bottom: 48px; animation: fadeUp 0.9s ease 0.5s both; z-index: 1; }
+    #splash .btn-watch { background: #e50914; color: #fff; border: none; padding: 14px 48px; font-size: 14px; letter-spacing: 4px; cursor: pointer; font-family: Georgia, serif; border-radius: 2px; animation: fadeUp 0.8s ease 0.7s both; transition: background 0.2s; z-index: 1; }
     #splash .btn-watch:hover { background: #c40812; }
     #splash .line { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #e50914, transparent); opacity: 0.5; animation: fadeIn 1.5s ease 1s both; }
     #chapters { position: absolute; inset: 0; background: #141414; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
@@ -28,7 +30,6 @@
     .card-inner { width: 145px; height: 205px; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid transparent; box-shadow: 0 4px 24px #000000aa; transition: border 0.25s, box-shadow 0.25s; }
     .card:hover .card-inner { border-color: var(--color); }
     .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .card-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, #1c1c1c, #2a2a2a); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #ffffff33; font-size: 11px; }
     .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--color) 0%, transparent 55%); }
     .card-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 12px 16px; text-align: center; }
     .card-label strong { color: #fff; font-size: 17px; display: block; text-shadow: 0 2px 8px #000; }
@@ -36,28 +37,26 @@
     .btn-message { background: none; border: 1px solid #e5091455; color: #e5091499; padding: 10px 32px; cursor: pointer; font-size: 13px; letter-spacing: 3px; border-radius: 2px; font-family: Georgia, serif; animation: fadeUp 0.6s ease 0.5s both; transition: background 0.2s, color 0.2s; }
     .btn-message:hover { background: #e5091415; color: #e50914; }
     #gallery { position: absolute; inset: 0; background: #0a0a0a; display: none; flex-direction: column; overflow-y: auto; }
-    .gallery-header { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.88); backdrop-filter: blur(12px); padding: 13px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #ffffff08; }
+    .gallery-header { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); padding: 13px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #ffffff08; }
     .btn-back { background: #ffffff12; border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .btn-back:hover { background: #ffffff22; }
     .gallery-header h2 { color: #fff; font-size: 18px; font-weight: normal; }
     .gallery-header p { color: #ffffff44; font-size: 11px; font-style: italic; margin-top: 2px; }
     .dot { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; }
-    .hero-wrap { height: 260px; position: relative; overflow: hidden; cursor: pointer; flex-shrink: 0; }
-    .hero-wrap img, .hero-wrap .ph { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-wrap .ph { background: linear-gradient(135deg, #1c1c1c, #2a2a2a); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: #ffffff33; font-size: 11px; }
+    .hero-wrap { height: 300px; position: relative; overflow: hidden; cursor: pointer; flex-shrink: 0; }
+    .hero-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-grad { position: absolute; inset: 0; background: linear-gradient(to top, #0a0a0a 0%, transparent 55%); pointer-events: none; }
     .hero-badge { position: absolute; bottom: 16px; left: 18px; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 2px; letter-spacing: 2px; font-family: Georgia, serif; }
-    .grid { padding: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
-    .grid-item { height: 148px; border-radius: 8px; overflow: hidden; cursor: pointer; animation: fadeIn 0.4s ease both; }
-    .grid-item img, .grid-item .ph { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .grid-item .ph { background: linear-gradient(135deg, #1c1c1c, #2a2a2a); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; color: #ffffff33; font-size: 11px; }
-    .gallery-footer { text-align: center; padding: 10px 0 36px; font-size: 11px; letter-spacing: 4px; font-family: Georgia, serif; }
+    .grid { padding: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+    .grid-item { height: 160px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s; }
+    .grid-item:hover { transform: scale(1.03); }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-footer { text-align: center; padding: 10px 0 40px; font-size: 11px; letter-spacing: 4px; font-family: Georgia, serif; }
     #credits { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; padding: 48px 24px 40px; }
     .stars-wrap { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
     .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--dur) ease-in-out var(--delay) infinite; }
     .credits-photo { width: 155px; height: 195px; border-radius: 14px; overflow: hidden; border: 2px solid #e5091433; box-shadow: 0 0 50px #e5091422; margin-bottom: 28px; flex-shrink: 0; animation: fadeUp 1s cubic-bezier(0.34,1.2,0.64,1) both; }
     .credits-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .credits-photo .ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a0505, #2d0a0a); display: flex; align-items: center; justify-content: center; font-size: 48px; }
     .credits-title { text-align: center; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.2s both; }
     .credits-title small { color: #e50914aa; font-size: 10px; letter-spacing: 5px; display: block; margin-bottom: 8px; }
     .credits-title h2 { color: #fff; font-size: 22px; font-weight: 400; }
@@ -70,7 +69,7 @@
     .credits-back:hover { background: #e5091415; color: #e50914; }
     #lightbox { position: fixed; inset: 0; background: #000000f0; display: none; align-items: center; justify-content: center; z-index: 300; cursor: pointer; }
     #lightbox img { max-width: 94vw; max-height: 90vh; object-fit: contain; border-radius: 8px; display: block; }
-    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); background: #ffffff22; border: none; color: #fff; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 310; display: flex; align-items: center; justify-content: center; }
+    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); background: #ffffff22; border: none; color: #fff; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 310; display: flex; align-items: center; justify-content: center; }
     #lb-prev { left: 10px; }
     #lb-next { right: 10px; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -143,9 +142,18 @@ var CHAPTERS = [
     color: "#e50914",
     photos: [
       "https://i.ibb.co/gbTgKkfq/IMG-0860.jpg",
+      "https://i.ibb.co/xqpvGLVP/IMG-0863.jpg",
+      "https://i.ibb.co/ffDZvCW/IMG-0888.jpg",
+      "https://i.ibb.co/tPnpjRsY/IMG-0911.jpg",
       "https://i.ibb.co/PsBbNy9Z/IMG-0915.jpg",
-      "https://i.ibb.co/TMCzqkHF/IMG-1197.jpg",
-      null
+      "https://i.ibb.co/8LrptxtJ/5ba6110e-c248-4072-8a26-513f64d6f268.jpg",
+      "https://i.ibb.co/GSCGS0Z/IMG-1149.jpg",
+      "https://i.ibb.co/GQvJqTWT/IMG-1151.jpg",
+      "https://i.ibb.co/XrH8sRK6/IMG-1159.jpg",
+      "https://i.ibb.co/Wpt5hN4z/IMG-1161.jpg",
+      "https://i.ibb.co/jPzpFFbf/IMG-1298.jpg",
+      "https://i.ibb.co/bM48dwJ7/IMG-1312.jpg",
+      "https://i.ibb.co/yF2wZjxF/IMG-1350.jpg"
     ]
   },
   {
@@ -153,10 +161,17 @@ var CHAPTERS = [
     subtitle: "Getting deeper",
     color: "#ff6b35",
     photos: [
-      "https://i.ibb.co/xKkWSVSp/0ee32668-5c72-40cb-bf17-052f16b44c5f.jpg",
+      "https://i.ibb.co/LX3GzCYK/2a6b69df-f173-47ba-9fef-d29ac78debe3.jpg",
       "https://i.ibb.co/r22hBzpR/caba4b3b-14f4-408f-ac90-bb9c7d951638.jpg",
+      "https://i.ibb.co/GfwZmVhF/4c72ff38-3d97-402b-a9f6-f116fb18ba5f.jpg",
+      "https://i.ibb.co/7xHpP2FT/b980e59f-5ffe-4eb8-8710-019f94320ad6.jpg",
+      "https://i.ibb.co/tpG9bff8/a699b0f1-0cab-4599-b881-24e536847085.jpg",
+      "https://i.ibb.co/B5D68m2C/dbf8efce-97ff-44ad-a828-54a6adfcaa88.jpg",
       "https://i.ibb.co/gbbcqtNx/a2aeb717-a42b-4d27-9e18-65f556c55e47.jpg",
-      null
+      "https://i.ibb.co/277BLCnR/34f383e7-1cd5-4be3-a0c7-b225051979fb.jpg",
+      "https://i.ibb.co/d4S9nPcJ/44ad5872-0264-48e1-b7ad-f77550bf068e.jpg",
+      "https://i.ibb.co/qLpXVJYj/f0edfaae-6885-4fe8-a6ba-6d2617356df8.jpg",
+      "https://i.ibb.co/23vFcFC0/247cb22c-636d-4615-a05c-d99ca0ac7f6c.jpg"
     ]
   },
   {
@@ -164,10 +179,12 @@ var CHAPTERS = [
     subtitle: "You & me, always",
     color: "#c41870",
     photos: [
-      "https://i.ibb.co/k2mkF7x5/IMG-4083.png",
-      "https://i.ibb.co/67dPSGd5/IMG-3953.jpg",
-      "https://i.ibb.co/s9056Fx8/IMG-3379.jpg",
-      null
+      "https://i.postimg.cc/t7vTr5zc/IMG-3529.jpg",
+      "https://i.postimg.cc/Dmw0dD1b/IMG-3588.jpg",
+      "https://i.postimg.cc/BX8vRKhy/IMG-3861.jpg",
+      "https://i.postimg.cc/Z05nFg6J/IMG-3936.jpg",
+      "https://i.postimg.cc/VdSN2C73/IMG-3945.jpg",
+      "https://i.postimg.cc/m1krLzTD/IMG-3949.jpg"
     ]
   }
 ];
@@ -203,10 +220,7 @@ function buildChapters() {
       card.className = 'card';
       card.style.animationDelay = (idx * 0.1 + 0.1) + 's';
       card.onclick = function() { currentChapter = ch; show('gallery'); };
-      var imgTag = ch.photos[0]
-        ? '<img class="card-img" src="' + ch.photos[0] + '" alt="" />'
-        : '<div class="card-placeholder"><span style="font-size:28px">&#128247;</span></div>';
-      card.innerHTML = '<div class="card-inner" style="--color:' + ch.color + '">' + imgTag + '<div class="card-overlay" style="--color:' + ch.color + '"></div><div class="card-label"><strong>' + ch.label + '</strong><em>' + ch.subtitle + '</em></div></div>';
+      card.innerHTML = '<div class="card-inner" style="--color:' + ch.color + '"><img class="card-img" src="' + ch.photos[0] + '" alt="" /><div class="card-overlay" style="--color:' + ch.color + '"></div><div class="card-label"><strong>' + ch.label + '</strong><em>' + ch.subtitle + '</em></div></div>';
       c.appendChild(card);
     })(CHAPTERS[i], i);
   }
@@ -223,27 +237,19 @@ function buildGallery() {
   badge.textContent = ch.label.toUpperCase();
   badge.style.background = ch.color;
   var hero = document.getElementById('gal-hero');
-  var old = hero.querySelectorAll('img,.ph');
+  var old = hero.querySelectorAll('img');
   for (var i = 0; i < old.length; i++) old[i].remove();
-  if (ch.photos[0]) {
-    var img = document.createElement('img');
-    img.src = ch.photos[0];
-    hero.insertBefore(img, hero.firstChild);
-  } else {
-    var ph = document.createElement('div');
-    ph.className = 'ph';
-    ph.innerHTML = '&#128247;';
-    hero.insertBefore(ph, hero.firstChild);
-  }
+  var heroImg = document.createElement('img');
+  heroImg.src = ch.photos[0];
+  hero.insertBefore(heroImg, hero.firstChild);
   var grid = document.getElementById('gal-grid');
   grid.innerHTML = '';
   for (var j = 1; j < ch.photos.length; j++) {
     (function(src, idx) {
       var item = document.createElement('div');
       item.className = 'grid-item';
-      item.style.animationDelay = (idx * 0.07 + 0.1) + 's';
       item.onclick = function() { openLightbox(idx + 1); };
-      item.innerHTML = src ? '<img src="' + src + '" alt="" />' : '<div class="ph">&#128247;</div>';
+      item.innerHTML = '<img src="' + src + '" alt="" />';
       grid.appendChild(item);
     })(ch.photos[j], j - 1);
   }
@@ -266,7 +272,7 @@ function closeLightbox() {
 
 function moveLightbox(dir) {
   var newIdx = lbIndex + dir;
-  if (newIdx < 0 || newIdx >= lbPhotos.length || !lbPhotos[newIdx]) return;
+  if (newIdx < 0 || newIdx >= lbPhotos.length) return;
   lbIndex = newIdx;
   document.getElementById('lb-img').src = lbPhotos[newIdx];
   document.getElementById('lb-prev').style.display = newIdx > 0 ? 'flex' : 'none';
@@ -276,7 +282,7 @@ function moveLightbox(dir) {
 function buildCredits() {
   var sw = document.getElementById('stars');
   sw.innerHTML = '';
-  for (var i = 0; i < 70; i++) {
+  for (var i = 0; i < 80; i++) {
     var s = document.createElement('div');
     s.className = 'star';
     var size = Math.random() * 2 + 1;
@@ -284,7 +290,7 @@ function buildCredits() {
     sw.appendChild(s);
   }
   var cp = document.getElementById('credits-photo');
-  cp.innerHTML = CONFIG.couplePhoto ? '<img src="' + CONFIG.couplePhoto + '" alt="" />' : '<div class="ph">&#10084;</div>';
+  cp.innerHTML = '<img src="' + CONFIG.couplePhoto + '" alt="" />';
   var rows = [
     ['Directed by','God'],
     ['Written by','Fate & destiny'],
@@ -302,7 +308,24 @@ function buildCredits() {
   document.getElementById('credits-msg').textContent = CONFIG.message;
 }
 
+// Floating hearts on splash
+function spawnHearts() {
+  var splash = document.getElementById('splash');
+  setInterval(function() {
+    var h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = Math.random() > 0.5 ? '\u2665' : '\u2764';
+    h.style.left = (Math.random() * 100) + '%';
+    h.style.animationDuration = (4 + Math.random() * 4) + 's';
+    h.style.animationDelay = (Math.random() * 2) + 's';
+    h.style.fontSize = (10 + Math.random() * 16) + 'px';
+    splash.appendChild(h);
+    setTimeout(function() { if (h.parentNode) h.parentNode.removeChild(h); }, 8000);
+  }, 800);
+}
+
 show('splash');
+spawnHearts();
 </script>
 </body>
 </html>
