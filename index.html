@@ -8,89 +8,126 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; background: #000; font-family: Georgia, serif; overflow: hidden; }
     #app { position: fixed; inset: 0; }
-    #splash { position: absolute; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease; overflow: hidden; }
-    #splash .glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, #e5091410 0%, transparent 70%); pointer-events: none; }
-    .heart { position: absolute; color: #e50914; font-size: 14px; opacity: 0; animation: floatHeart 6s ease-in infinite; pointer-events: none; }
-    @keyframes floatHeart { 0% { opacity: 0; transform: translateY(100vh) scale(0.5); } 20% { opacity: 0.6; } 80% { opacity: 0.3; } 100% { opacity: 0; transform: translateY(-100px) scale(1.2); } }
-    #splash .logo { margin-bottom: 28px; z-index: 1; }
+
+    /* ── TRANSITIONS ── */
+    .screen { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; }
+    .screen.active { display: flex; animation: screenIn 0.6s ease both; }
+    @keyframes screenIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+    /* ── SPLASH ── */
+    #splash { background: #000; overflow: hidden; }
+    #splash .glow { position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, #e5091418 0%, transparent 70%); pointer-events: none; animation: glowPulse 3s ease-in-out infinite; }
+    @keyframes glowPulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.15);opacity:1} }
+    .petal { position: absolute; pointer-events: none; font-size: 16px; opacity: 0; animation: fallPetal var(--dur) ease-in var(--delay) infinite; }
+    @keyframes fallPetal { 0%{opacity:0;transform:translateY(-20px) rotate(0deg)} 10%{opacity:0.8} 80%{opacity:0.4} 100%{opacity:0;transform:translateY(110vh) rotate(720deg)} }
+    #splash .logo { margin-bottom: 20px; z-index: 1; animation: fadeUp 0.8s ease both; }
     #splash .logo svg { width: 80px; height: 22px; }
-    #splash h1 { color: #fff; font-size: clamp(36px,10vw,72px); font-weight: bold; letter-spacing: 6px; line-height: 1; text-align: center; animation: fadeUp 0.9s cubic-bezier(0.34,1.3,0.64,1) 0.15s both; z-index: 1; }
-    #splash .amp { display: block; color: #e50914; font-size: 0.5em; letter-spacing: 12px; margin: 8px 0; }
-    #splash .tagline { color: #ffffff44; font-style: italic; font-size: 13px; letter-spacing: 3px; margin-top: 14px; margin-bottom: 48px; animation: fadeUp 0.9s ease 0.5s both; z-index: 1; }
-    #splash .btn-watch { background: #e50914; color: #fff; border: none; padding: 14px 48px; font-size: 14px; letter-spacing: 4px; cursor: pointer; font-family: Georgia, serif; border-radius: 2px; animation: fadeUp 0.8s ease 0.7s both; transition: background 0.2s; z-index: 1; }
-    #splash .btn-watch:hover { background: #c40812; }
+    #splash h1 { color: #fff; font-size: clamp(34px,9vw,68px); font-weight: bold; letter-spacing: 6px; line-height: 1; text-align: center; animation: fadeUp 0.9s cubic-bezier(0.34,1.3,0.64,1) 0.2s both; z-index: 1; }
+    #splash .amp { display: block; color: #e50914; font-size: 0.5em; letter-spacing: 12px; margin: 8px 0; animation: heartbeat 2s ease-in-out 1.5s infinite; }
+    @keyframes heartbeat { 0%,100%{transform:scale(1)} 14%{transform:scale(1.25)} 28%{transform:scale(1)} 42%{transform:scale(1.15)} 56%{transform:scale(1)} }
+    #splash .tagline { color: #ffffff55; font-style: italic; font-size: 13px; letter-spacing: 3px; margin-top: 10px; animation: fadeUp 0.9s ease 0.5s both; z-index: 1; }
+    #splash .counter { color: #e5091488; font-size: 12px; letter-spacing: 2px; margin-top: 8px; margin-bottom: 8px; animation: fadeUp 0.9s ease 0.6s both; z-index: 1; }
+    #splash .quote { color: #ffffff33; font-size: 12px; font-style: italic; margin-bottom: 36px; min-height: 18px; z-index: 1; animation: fadeUp 0.9s ease 0.7s both; }
+    #splash .btn-watch { background: #e50914; color: #fff; border: none; padding: 14px 48px; font-size: 14px; letter-spacing: 4px; cursor: pointer; font-family: Georgia, serif; border-radius: 2px; animation: fadeUp 0.8s ease 0.8s both; transition: all 0.3s; z-index: 1; position: relative; overflow: hidden; }
+    #splash .btn-watch::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #ffffff22, transparent); transform: translateX(-100%); transition: transform 0.5s; }
+    #splash .btn-watch:hover::after { transform: translateX(100%); }
+    #splash .btn-watch:hover { background: #c40812; transform: scale(1.04); box-shadow: 0 8px 24px #e5091444; }
     #splash .line { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #e50914, transparent); opacity: 0.5; animation: fadeIn 1.5s ease 1s both; }
-    #chapters { position: absolute; inset: 0; background: #141414; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; }
+
+    /* ── CHAPTERS ── */
+    #chapters { background: #141414; padding: 24px; overflow-y: auto; }
     #chapters .heading { text-align: center; margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
     #chapters .heading small { color: #ffffff44; font-size: 11px; letter-spacing: 4px; display: block; margin-bottom: 10px; }
     #chapters .heading h2 { color: #fff; font-size: 24px; font-weight: 400; }
     .cards { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; margin-bottom: 36px; }
-    .card { cursor: pointer; text-align: center; animation: fadeUp 0.5s ease both; transition: transform 0.25s ease; }
-    .card:hover { transform: translateY(-10px) scale(1.05); }
-    .card-inner { width: 145px; height: 205px; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid transparent; box-shadow: 0 4px 24px #000000aa; transition: border 0.25s, box-shadow 0.25s; }
-    .card:hover .card-inner { border-color: var(--color); }
-    .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card { cursor: pointer; text-align: center; animation: fadeUp 0.5s ease both; transition: transform 0.3s ease; }
+    .card:hover { transform: translateY(-12px) scale(1.06); }
+    .card-inner { width: 145px; height: 205px; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid transparent; box-shadow: 0 4px 24px #000000aa; transition: border 0.3s, box-shadow 0.3s; }
+    .card:hover .card-inner { border-color: var(--color); box-shadow: 0 20px 50px color-mix(in srgb, var(--color) 35%, transparent); }
+    .card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .card:hover .card-img { transform: scale(1.08); }
     .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--color) 0%, transparent 55%); }
     .card-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 12px 16px; text-align: center; }
     .card-label strong { color: #fff; font-size: 17px; display: block; text-shadow: 0 2px 8px #000; }
     .card-label em { color: #ffffffaa; font-size: 11px; display: block; margin-top: 3px; }
-    .btn-message { background: none; border: 1px solid #e5091455; color: #e5091499; padding: 10px 32px; cursor: pointer; font-size: 13px; letter-spacing: 3px; border-radius: 2px; font-family: Georgia, serif; animation: fadeUp 0.6s ease 0.5s both; transition: background 0.2s, color 0.2s; }
-    .btn-message:hover { background: #e5091415; color: #e50914; }
-    #gallery { position: absolute; inset: 0; background: #0a0a0a; display: none; flex-direction: column; overflow-y: auto; }
-    .gallery-header { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); padding: 13px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #ffffff08; }
-    .btn-back { background: #ffffff12; border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-    .btn-back:hover { background: #ffffff22; }
+    .btn-message { background: none; border: 1px solid #e5091455; color: #e5091499; padding: 10px 32px; cursor: pointer; font-size: 13px; letter-spacing: 3px; border-radius: 2px; font-family: Georgia, serif; animation: fadeUp 0.6s ease 0.5s both; transition: all 0.3s; }
+    .btn-message:hover { background: #e5091415; color: #e50914; transform: scale(1.04); border-color: #e5091488; }
+
+    /* ── GALLERY ── */
+    #gallery { background: #0a0a0a; overflow-y: auto; align-items: stretch; justify-content: flex-start; }
+    .gallery-header { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); padding: 13px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #ffffff08; width: 100%; flex-shrink: 0; }
+    .btn-back { background: #ffffff12; border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .btn-back:hover { background: #ffffff22; transform: scale(1.1); }
     .gallery-header h2 { color: #fff; font-size: 18px; font-weight: normal; }
     .gallery-header p { color: #ffffff44; font-size: 11px; font-style: italic; margin-top: 2px; }
-    .dot { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; }
-    .hero-wrap { height: 300px; position: relative; overflow: hidden; cursor: pointer; flex-shrink: 0; }
-    .hero-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .dot { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; animation: dotPulse 2s ease-in-out infinite; }
+    @keyframes dotPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
+    .hero-wrap { height: 300px; position: relative; overflow: hidden; cursor: pointer; flex-shrink: 0; width: 100%; }
+    .hero-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+    .hero-wrap:hover img { transform: scale(1.04); }
     .hero-grad { position: absolute; inset: 0; background: linear-gradient(to top, #0a0a0a 0%, transparent 55%); pointer-events: none; }
     .hero-badge { position: absolute; bottom: 16px; left: 18px; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 2px; letter-spacing: 2px; font-family: Georgia, serif; }
-    .grid { padding: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-    .grid-item { height: 160px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s; }
-    .grid-item:hover { transform: scale(1.03); }
-    .grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .gallery-footer { text-align: center; padding: 10px 0 40px; font-size: 11px; letter-spacing: 4px; font-family: Georgia, serif; }
-    #credits { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; padding: 48px 24px 40px; }
+    .grid { padding: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; width: 100%; }
+    .grid-item { height: 160px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s; }
+    .grid-item:hover { transform: scale(1.04); box-shadow: 0 8px 24px #00000088; }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .grid-item:hover img { transform: scale(1.08); }
+    .gallery-footer { text-align: center; padding: 10px 0 40px; font-size: 11px; letter-spacing: 4px; font-family: Georgia, serif; width: 100%; }
+
+    /* ── CREDITS ── */
+    #credits { background: #000; overflow-y: auto; padding: 48px 24px 40px; }
     .stars-wrap { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
     .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--dur) ease-in-out var(--delay) infinite; }
-    .credits-photo { width: 155px; height: 195px; border-radius: 14px; overflow: hidden; border: 2px solid #e5091433; box-shadow: 0 0 50px #e5091422; margin-bottom: 28px; flex-shrink: 0; animation: fadeUp 1s cubic-bezier(0.34,1.2,0.64,1) both; }
+    .big-heart { font-size: 40px; margin-bottom: 16px; animation: heartbeat2 1.5s ease-in-out infinite; z-index: 1; }
+    @keyframes heartbeat2 { 0%,100%{transform:scale(1)} 25%{transform:scale(1.2)} 50%{transform:scale(1)} 75%{transform:scale(1.1)} }
+    .credits-photo { width: 155px; height: 195px; border-radius: 14px; overflow: hidden; border: 2px solid #e5091433; box-shadow: 0 0 50px #e5091422, 0 0 100px #e5091411; margin-bottom: 28px; flex-shrink: 0; animation: fadeUp 1s cubic-bezier(0.34,1.2,0.64,1) both; z-index: 1; transition: transform 0.3s, box-shadow 0.3s; }
+    .credits-photo:hover { transform: scale(1.03); box-shadow: 0 0 70px #e5091444; }
     .credits-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .credits-title { text-align: center; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.2s both; }
+    .credits-title { text-align: center; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.2s both; z-index: 1; }
     .credits-title small { color: #e50914aa; font-size: 10px; letter-spacing: 5px; display: block; margin-bottom: 8px; }
     .credits-title h2 { color: #fff; font-size: 22px; font-weight: 400; }
-    .credits-table { display: grid; grid-template-columns: auto auto; gap: 8px 28px; margin-bottom: 28px; animation: fadeUp 1s ease 0.4s both; }
+    .credits-table { display: grid; grid-template-columns: auto auto; gap: 8px 28px; margin-bottom: 28px; animation: fadeUp 1s ease 0.4s both; z-index: 1; }
     .credits-table .key { color: #808080; font-size: 13px; text-align: right; }
     .credits-table .val { color: #e5e5e5; font-size: 13px; }
-    .message-box { max-width: 290px; text-align: center; padding: 20px 22px; border: 1px solid #ffffff0a; border-radius: 8px; background: #ffffff04; animation: fadeUp 1.1s ease 0.6s both; margin-bottom: 28px; }
+    .message-box { max-width: 290px; text-align: center; padding: 20px 22px; border: 1px solid #e5091422; border-radius: 8px; background: #e509140a; animation: fadeUp 1.1s ease 0.6s both; margin-bottom: 28px; z-index: 1; box-shadow: 0 0 30px #e509140a; }
     .message-box p { color: #e5e5e5; font-size: 14px; line-height: 1.8; font-style: italic; white-space: pre-line; margin: 0; }
-    .credits-back { background: none; border: 1px solid #e5091455; color: #e5091499; padding: 10px 28px; cursor: pointer; font-size: 12px; letter-spacing: 3px; border-radius: 2px; font-family: Georgia, serif; animation: fadeUp 1.1s ease 0.8s both; transition: background 0.2s, color 0.2s; }
-    .credits-back:hover { background: #e5091415; color: #e50914; }
-    #lightbox { position: fixed; inset: 0; background: #000000f0; display: none; align-items: center; justify-content: center; z-index: 300; cursor: pointer; }
-    #lightbox img { max-width: 94vw; max-height: 90vh; object-fit: contain; border-radius: 8px; display: block; }
-    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); background: #ffffff22; border: none; color: #fff; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 310; display: flex; align-items: center; justify-content: center; }
-    #lb-prev { left: 10px; }
-    #lb-next { right: 10px; }
+    .credits-back { background: none; border: 1px solid #e5091455; color: #e5091499; padding: 10px 28px; cursor: pointer; font-size: 12px; letter-spacing: 3px; border-radius: 2px; font-family: Georgia, serif; animation: fadeUp 1.1s ease 0.8s both; transition: all 0.3s; z-index: 1; }
+    .credits-back:hover { background: #e5091415; color: #e50914; transform: scale(1.04); }
+
+    /* ── LIGHTBOX ── */
+    #lightbox { position: fixed; inset: 0; background: #000000f2; display: none; align-items: center; justify-content: center; z-index: 300; cursor: pointer; animation: fadeIn 0.3s ease; }
+    #lightbox img { max-width: 94vw; max-height: 90vh; object-fit: contain; border-radius: 8px; display: block; animation: zoomIn 0.3s ease; }
+    @keyframes zoomIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+    .lb-arrow { position: fixed; top: 50%; transform: translateY(-50%); background: #ffffff18; border: 1px solid #ffffff22; color: #fff; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 20px; z-index: 310; display: flex; align-items: center; justify-content: center; transition: all 0.2s; backdrop-filter: blur(8px); }
+    .lb-arrow:hover { background: #ffffff30; transform: translateY(-50%) scale(1.1); }
+    #lb-prev { left: 12px; }
+    #lb-next { right: 12px; }
+
+    /* ── UTILS ── */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.7; } }
+    @keyframes twinkle { 0%,100% { opacity: 0.1; } 50% { opacity: 0.8; } }
   </style>
 </head>
 <body>
 <div id="app">
-  <div id="splash">
+
+  <!-- SPLASH -->
+  <div id="splash" class="screen active">
     <div class="glow"></div>
     <div class="logo">
       <svg viewBox="0 0 111 30" fill="#e50914"><path d="M105.06 0l-11.44 30.02L82.18 0H69.93v30.02L58.49 0H46.44l-9.96 26.09L27.06 0H14.82L0 30h12.26l8.82-22.98L29.9 30h11.88l8.82-23.12L59.42 30H71.7V7.16l10.88 22.84h11.26V7.16L104.72 30H111L95.94 0z"/></svg>
     </div>
     <h1>AYMEN<span class="amp">&amp;</span>BASIA</h1>
     <p class="tagline">An original series</p>
+    <p class="counter" id="days-counter"></p>
+    <p class="quote" id="typewriter"></p>
     <button class="btn-watch" onclick="show('chapters')">WATCH NOW</button>
     <div class="line"></div>
   </div>
 
-  <div id="chapters">
+  <!-- CHAPTERS -->
+  <div id="chapters" class="screen">
     <div class="heading">
       <small>AYMEN &amp; BASIA</small>
       <h2>Choose a chapter</h2>
@@ -99,7 +136,8 @@
     <button class="btn-message" onclick="show('credits')">&#9829; &nbsp; A message for you</button>
   </div>
 
-  <div id="gallery">
+  <!-- GALLERY -->
+  <div id="gallery" class="screen">
     <div class="gallery-header">
       <button class="btn-back" onclick="show('chapters')">&#8592;</button>
       <div>
@@ -116,8 +154,10 @@
     <div class="gallery-footer" id="gal-footer"></div>
   </div>
 
-  <div id="credits">
+  <!-- CREDITS -->
+  <div id="credits" class="screen">
     <div class="stars-wrap" id="stars"></div>
+    <div class="big-heart">&#10084;</div>
     <div class="credits-photo" id="credits-photo"></div>
     <div class="credits-title">
       <small>THE END</small>
@@ -128,11 +168,13 @@
     <button class="credits-back" onclick="show('chapters')">&#8592; Back</button>
   </div>
 
+  <!-- LIGHTBOX -->
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lb-img" src="" alt="" />
     <button class="lb-arrow" id="lb-prev" onclick="event.stopPropagation();moveLightbox(-1)">&#8592;</button>
     <button class="lb-arrow" id="lb-next" onclick="event.stopPropagation();moveLightbox(1)">&#8594;</button>
   </div>
+
 </div>
 <script>
 var CHAPTERS = [
@@ -191,6 +233,7 @@ var CHAPTERS = [
 
 var CONFIG = {
   couplePhoto: "https://i.ibb.co/ksvqg5Kf/A39036-EF-5-AE7-4715-9-EF8-CE7683-FD7-B94.png",
+  startDate: "2024-11-17",
   message: "Every moment with you feels like\nthe beginning of something beautiful.\n\nHappy anniversary, my love.",
   boyfriendName: "Aymen",
   girlfriendName: "Basia"
@@ -200,12 +243,77 @@ var currentChapter = null;
 var lbPhotos = [];
 var lbIndex = 0;
 
-function show(screen) {
-  var screens = ['splash','chapters','gallery','credits'];
-  for (var i = 0; i < screens.length; i++) {
-    document.getElementById(screens[i]).style.display = 'none';
+// Days counter
+function getDays() {
+  var start = new Date(CONFIG.startDate);
+  var now = new Date();
+  var diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  return diff;
+}
+
+// Typewriter
+var quotes = [
+  "You are my favourite place to go when my mind searches for peace.",
+  "In you, I found my home.",
+  "Every love story is beautiful, but ours is my favourite.",
+  "You make every moment worth remembering."
+];
+var qIdx = 0;
+var charIdx = 0;
+var typing = true;
+function typeWriter() {
+  var el = document.getElementById('typewriter');
+  if (!el) return;
+  if (typing) {
+    if (charIdx < quotes[qIdx].length) {
+      el.textContent = quotes[qIdx].substring(0, charIdx + 1);
+      charIdx++;
+      setTimeout(typeWriter, 55);
+    } else {
+      typing = false;
+      setTimeout(typeWriter, 2800);
+    }
+  } else {
+    if (charIdx > 0) {
+      el.textContent = quotes[qIdx].substring(0, charIdx - 1);
+      charIdx--;
+      setTimeout(typeWriter, 28);
+    } else {
+      typing = true;
+      qIdx = (qIdx + 1) % quotes.length;
+      setTimeout(typeWriter, 400);
+    }
   }
-  document.getElementById(screen).style.display = 'flex';
+}
+
+// Floating petals
+function spawnPetals() {
+  var splash = document.getElementById('splash');
+  var items = ['\u2665','\u2764','\u2665','\u273F','\u2665'];
+  setInterval(function() {
+    var p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = items[Math.floor(Math.random() * items.length)];
+    p.style.left = (Math.random() * 100) + '%';
+    p.style.color = Math.random() > 0.5 ? '#e50914' : '#ff6b9d';
+    p.style.fontSize = (10 + Math.random() * 18) + 'px';
+    p.style.setProperty('--dur', (5 + Math.random() * 5) + 's');
+    p.style.setProperty('--delay', (Math.random() * 2) + 's');
+    splash.appendChild(p);
+    setTimeout(function() { if (p.parentNode) p.parentNode.removeChild(p); }, 10000);
+  }, 600);
+}
+
+function show(screen) {
+  var all = document.querySelectorAll('.screen');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('active');
+    all[i].style.display = 'none';
+  }
+  var el = document.getElementById(screen);
+  el.style.display = 'flex';
+  void el.offsetWidth;
+  el.classList.add('active');
   if (screen === 'chapters') buildChapters();
   if (screen === 'gallery') buildGallery();
   if (screen === 'credits') buildCredits();
@@ -218,7 +326,7 @@ function buildChapters() {
     (function(ch, idx) {
       var card = document.createElement('div');
       card.className = 'card';
-      card.style.animationDelay = (idx * 0.1 + 0.1) + 's';
+      card.style.animationDelay = (idx * 0.12 + 0.1) + 's';
       card.onclick = function() { currentChapter = ch; show('gallery'); };
       card.innerHTML = '<div class="card-inner" style="--color:' + ch.color + '"><img class="card-img" src="' + ch.photos[0] + '" alt="" /><div class="card-overlay" style="--color:' + ch.color + '"></div><div class="card-label"><strong>' + ch.label + '</strong><em>' + ch.subtitle + '</em></div></div>';
       c.appendChild(card);
@@ -248,12 +356,13 @@ function buildGallery() {
     (function(src, idx) {
       var item = document.createElement('div');
       item.className = 'grid-item';
+      item.style.animationDelay = (idx * 0.05) + 's';
       item.onclick = function() { openLightbox(idx + 1); };
       item.innerHTML = '<img src="' + src + '" alt="" />';
       grid.appendChild(item);
     })(ch.photos[j], j - 1);
   }
-  document.getElementById('gal-footer').innerHTML = '<span style="color:' + ch.color + '77">&#9829; AYMEN &amp; BASIA &#9829;</span>';
+  document.getElementById('gal-footer').innerHTML = '<span style="color:' + ch.color + '88">&#9829; AYMEN &amp; BASIA &#9829;</span>';
   lbPhotos = ch.photos;
 }
 
@@ -265,11 +374,7 @@ function openLightbox(idx) {
   document.getElementById('lb-next').style.display = idx < lbPhotos.length - 1 ? 'flex' : 'none';
   document.getElementById('lightbox').style.display = 'flex';
 }
-
-function closeLightbox() {
-  document.getElementById('lightbox').style.display = 'none';
-}
-
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 function moveLightbox(dir) {
   var newIdx = lbIndex + dir;
   if (newIdx < 0 || newIdx >= lbPhotos.length) return;
@@ -282,15 +387,14 @@ function moveLightbox(dir) {
 function buildCredits() {
   var sw = document.getElementById('stars');
   sw.innerHTML = '';
-  for (var i = 0; i < 80; i++) {
+  for (var i = 0; i < 90; i++) {
     var s = document.createElement('div');
     s.className = 'star';
-    var size = Math.random() * 2 + 1;
-    s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;width:' + size + 'px;height:' + size + 'px;--dur:' + (2+Math.random()*4) + 's;--delay:' + (Math.random()*4) + 's;opacity:' + (Math.random()*0.5+0.1) + ';';
+    var size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;width:' + size + 'px;height:' + size + 'px;--dur:' + (1.5+Math.random()*4) + 's;--delay:' + (Math.random()*4) + 's;opacity:' + (Math.random()*0.6+0.1) + ';';
     sw.appendChild(s);
   }
-  var cp = document.getElementById('credits-photo');
-  cp.innerHTML = '<img src="' + CONFIG.couplePhoto + '" alt="" />';
+  document.getElementById('credits-photo').innerHTML = '<img src="' + CONFIG.couplePhoto + '" alt="" />';
   var rows = [
     ['Directed by','God'],
     ['Written by','Fate & destiny'],
@@ -298,7 +402,8 @@ function buildCredits() {
     ['Girlfriend', CONFIG.girlfriendName],
     ['Produced by','Time & love'],
     ['Soundtrack','Your laugh'],
-    ['Special FX','Your smile']
+    ['Special FX','Your smile'],
+    ['Together since', CONFIG.startDate]
   ];
   var html = '';
   for (var i = 0; i < rows.length; i++) {
@@ -308,24 +413,22 @@ function buildCredits() {
   document.getElementById('credits-msg').textContent = CONFIG.message;
 }
 
-// Floating hearts on splash
-function spawnHearts() {
-  var splash = document.getElementById('splash');
-  setInterval(function() {
-    var h = document.createElement('div');
-    h.className = 'heart';
-    h.textContent = Math.random() > 0.5 ? '\u2665' : '\u2764';
-    h.style.left = (Math.random() * 100) + '%';
-    h.style.animationDuration = (4 + Math.random() * 4) + 's';
-    h.style.animationDelay = (Math.random() * 2) + 's';
-    h.style.fontSize = (10 + Math.random() * 16) + 'px';
-    splash.appendChild(h);
-    setTimeout(function() { if (h.parentNode) h.parentNode.removeChild(h); }, 8000);
-  }, 800);
-}
+// Init
+var days = getDays();
+var dc = document.getElementById('days-counter');
+if (dc && days > 0) dc.textContent = days + ' days together';
+spawnPetals();
+setTimeout(typeWriter, 1200);
 
-show('splash');
-spawnHearts();
+// Keyboard nav in lightbox
+document.addEventListener('keydown', function(e) {
+  var lb = document.getElementById('lightbox');
+  if (lb.style.display === 'flex') {
+    if (e.key === 'ArrowLeft') moveLightbox(-1);
+    if (e.key === 'ArrowRight') moveLightbox(1);
+    if (e.key === 'Escape') closeLightbox();
+  }
+});
 </script>
 </body>
 </html>
